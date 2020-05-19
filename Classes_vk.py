@@ -82,8 +82,12 @@ def launching_class():
     users = list()
     user_one_by_one = input('Введите через пробел ссылки на профили или id пользователей:\n')
     users.append(user_one_by_one.split(" "))
-    start = MutualFriends(users)
-    start.user_ids_vk()
+    for id_vk in users:
+        if id_vk == int():
+            start = MutualFriends(id_vk)
+            start.user_ids_vk()
+        else:
+            print('Please, write data in correct order')
 
 
 launching_class()
