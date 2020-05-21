@@ -1,92 +1,41 @@
-import vk
+import vk_api
 import requests
 import time
 
 
 class MutualFriends:
-    def __init__(self, user_ids_vk):
+    def __init__(self, login, password, user_ids_vk):
         self.user_ids_vk = user_ids_vk
-        self.cache_friends = dict()
-        self.names = dict()
+        self.login = login
+        self.password = password
+        self.request = None
 
-    def get_friends(self):
-        if self in self.cache_friends:
-            return self.cache_friends[self]
-        else:
+    def finding_mutual_friend(self):
+        try:
             time.sleep(1)
-            while 1:
-                try:
-                    fr = vk.friends.get(user_id=self)
-                except Exception as e:
-                    if str(e).find('Access denied: user deactivated.') > -1:
-                        return list()
-                    else:
-                        print(e)
-                        time.sleep(5)
-                else:
-                    fr = set(fr['items'])
-                    self.cache_friends[self] = fr
-                    return fr
-
-    def get_cfriends(self, uid2):
-        time.sleep(1)
-        while 1:
-            try:
-                fr = vk.friends.getMutual(source_uid=self, target_uid=uid2)
-            except Exception as e:
-                print(e)
-                time.sleep(5)
-            else:
-                return set(fr)
-
-    def get_name(self):
-        if self in self.names:
-            return self.names[self]
-        else:
-            time.sleep(1)
-            while 1:
-                try:
-                    u = vk.users.get(user_ids=self)
-                except Exception as e:
-                    print(e)
-                    time.sleep(5)
-                else:
-                    name = u[0]['first_name'] + ' ' + u[0]['last_name'] + ' (' + str(self) + ')'
-                    self.names[self] = name
-                    return name
-
-    def check_friend_status(self):
-        while 1:
-            ids = rex.sub(' ', ids)
-            ids = [int(i) for i in ids.split(' ') if len(i) > 0]
-            friends = []
-            cfriends = []
-
-            print()
-            for uid in ids:
-                friends.append(MutualFriends.get_friends(self))
-                print(MutualFriends.get_name(self))
-            print()
-
-            for i in range(len(ids)):
-                cfriends.append([0] * len(ids))
-                for j in range(i + 1, len(ids)):
-                    # общие друзья
-                    cfriends[i][j] = get_cfriends(ids[i], ids[j])
-                    if ids[i] in friends[j]:
-                        print(get_name(ids[i]), 'дружит с', get_name(ids[j]))
-            print()
+            self.request = vk_api.VkApi(self.login, self.password)
+        except Exception as error:
+            print(error)
+        try:
+            self.request.auth()
+        except Exception as error:
+            print(error)
 
 
 def launching_class():
     users = list()
-    user_one_by_one = input('Введите через пробел ссылки на профили или id пользователей:\n')
+    user = input('Логин и пароль для пользователя > ')
+    data_list = list(user.split(" "))
+    user_one_by_one = input('Введите через запятую ссылки на профили или id пользователей (Не более ста) > ')
     users.append(user_one_by_one.split(" "))
     for id_vk in users:
         if id_vk == int():
-            start = MutualFriends(id_vk)
+            time.sleep(1)
+            start = MutualFriends(data_list[0], data_list[1], id_vk)
+            time.sleep(1)
             start.user_ids_vk()
         else:
+            time.sleep(1.5)
             print('Please, write data in correct order')
 
 
