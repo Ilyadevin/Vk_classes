@@ -1,5 +1,4 @@
 import vk_api
-import requests
 import time
 
 
@@ -18,6 +17,14 @@ class MutualFriends:
             print(error)
         try:
             self.request.auth()
+        except Exception as error:
+            print(error)
+        try:
+            comparison = self.request.auth.getMutual(source_uid=self.user_ids_vk, target_uid=self.request.get_api())
+            if comparison is True:
+                print(self.user_ids_vk)
+            else:
+                pass
         except Exception as error:
             print(error)
 
